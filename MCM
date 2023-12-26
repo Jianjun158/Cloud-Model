@@ -1,0 +1,63 @@
+function [MCM] = MCM(PO,PN) 
+
+pi=3.141592653;
+
+Ex1=PO(1); 
+En1=PO(2);
+He1=PO(3);
+Ex2=PN(1);
+En2=PN(2);
+He2=PN(3);
+if(Ex1==Ex2 && En1==En2 && He1==He2)
+    MCM=1;
+    return
+end
+
+    if((Ex1>Ex2)||(Ex1==Ex2 && En1>En2))
+        Ex0=Ex1;
+        Ex1=Ex2;
+        Ex2=Ex0;
+        En0=En1;
+        En1=En2;
+        En2=En0;
+        He0=He1;
+        He1=He2;
+        He2=He0;
+    end
+    en1=(3*He1+En1); 
+    en2=(3*He2+En2);
+%     if(Ex1==Ex2 && En1<En2)
+%         syms x
+%         y1=exp(-(x-Ex1)^2/(2*en1^2));
+%         s=int(y1,-inf,inf);
+%         MCM=2*s/(sqrt(2*pi)*(en1+en2));
+%         MCM=vpa(MCM,4);
+%         return
+%     end
+    p2=(Ex1*en2+Ex2*en1)/(en1+en2);%交点p1,p2,默认p2>p1
+    p1=(Ex1*en2-Ex2*en1)/(en2-en1);
+    if(p1>p2)
+        p3=p1;
+        p1=p2;
+        p2=p3;
+    end                                                                                             
+    m=(Ex2-3*en2);
+    v=(Ex1+3*en1);
+    if (p1<Ex1)&&(p1>m&&p2<v)
+         s=sqrt(2*pi)*en1*(normcdf((p1-Ex1)/en1))+sqrt(2*pi)*en2*(normcdf((p2-Ex2)/en2)-normcdf((p1-Ex2)/en2))+sqrt(2*pi)*en1*(1-normcdf((p2-Ex1)/en1));
+    elseif(p1>Ex1)&&(p1>m&&p2<v)
+         s=sqrt(2*pi)*en2*(normcdf((p1-Ex2)/en2))+sqrt(2*pi)*en1*(normcdf((p2-Ex1)/en1)-normcdf((p1-Ex1)/en1))+sqrt(2*pi)*en2*(1-normcdf((p2-Ex2)/en2));   
+    elseif (p1<Ex1)&&(p1<m&&p2<v)
+         s=sqrt(2*pi)*en2*(normcdf((p2-Ex2)/en2))+sqrt(2*pi)*en1*(1-normcdf(((p2-Ex1)/en1)));
+    elseif (p1>Ex1)&& p1<m&&p2<v  
+         s=sqrt(2*pi)*en1*(normcdf((p2-Ex1)/en1))+sqrt(2*pi)*en2*(1-normcdf(((p2-Ex2)/en2)));
+    elseif (p1<Ex1)&&(p1>m&&p2>v)
+         s=sqrt(2*pi)*en1*(normcdf((p1-Ex1)/en1))+sqrt(2*pi)*en2*(1-normcdf(((p1-Ex2)/en2)));
+    elseif (p1>Ex1)&&(p1>m&&p2>v)
+         s=sqrt(2*pi)*en2*(normcdf((p1-Ex2)/en2))+sqrt(2*pi)*en1*(1-normcdf(((p1-Ex1)/en1)));
+    elseif (p1<m&&p2>v)||(m>v)
+         s=0;
+    end
+    MCM=2*s/(sqrt(2*pi)*(en1+en2));
+end
+
