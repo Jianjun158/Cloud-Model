@@ -1,0 +1,26 @@
+function [DDTSTCM] = DDTSTCM(PO,PN,k) 
+pi=3.141592653;
+Ex1=PO(1);
+En1=PO(2);
+He1=PO(3);
+Ex2=PN(1);
+En2=PN(2);
+He2=PN(3);
+if(abs(Ex1-Ex2)>(3*(En1+En2)))
+    ETCM=0;
+end
+if(abs(Ex1-Ex2)<(3*(En1+En2)))
+  a1=Ex1;
+  a2=3*En1;
+  a3=3*En1;
+  b1=Ex2;
+  b2=3*En2;
+  b3=3*En2;
+  T=a1-b1;
+  L=a2-b2;
+  R=a3-b3;
+  ETCM=exp(-(((T)^2+T*((1/3)*(1-k)*R-(1/3)*k*L)+(k/9)*(L)^2+((1-k)/9)*(R^2))^(1/2))^2);
+end
+PCM=(min(sqrt(En1^2+He1^2),sqrt(En2^2+He2^2))/max(sqrt(En1^2+He1^2),sqrt(En2^2+He2^2)));
+DDTSTCM=ETCM*PCM;
+end
