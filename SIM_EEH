@@ -1,0 +1,33 @@
+function [Sim_EEH] = SimEEH(PO,PN)  % Sim_EEH
+
+pi=3.141592653;
+
+Ex1=PO(1); 
+En1=PO(2);
+He1=PO(3);
+Ex2=PN(1);
+En2=PN(2);
+He2=PN(3);
+% if(Ex1==0 || Ex2==0 || En1==0||En2==0|| He1==0 || He2==0)
+%     Sim_EEH=0;
+%     return
+% end
+    if(Ex1>Ex2)
+        Ex0=Ex1;
+        Ex1=Ex2;
+        Ex2=Ex0;
+        En0=En1;
+        En1=En2;
+        En2=En0;
+        He0=He1;
+        He1=He2;
+        He2=He0;
+    end
+Sim_Ex=exp(-(Ex1-Ex2)^2/(3+(Ex1-Ex2)^2));
+Sim_En=exp(-(En1-En2)^2/(3+(En1-En2)^2));
+Sim_He=exp(-(He1-He2)^2/(3+(He1-He2)^2));
+alpha=0.45;
+beta=0.35;
+gama=0.2;
+Sim_EH=(Sim_En)^(beta)*(Sim_He)^(gama);
+Sim_EEH=(Sim_Ex)^(alpha)*(Sim_En)^(beta)*(Sim_He)^(gama);
