@@ -1,0 +1,31 @@
+function [MSPSCM] = MSPSCM(PO,PN)  % MSPSCM
+
+pi=3.141592653;
+
+Ex1=PO(1);
+En1=PO(2);
+He1=PO(3);
+Ex2=PN(1);
+En2=PN(2);
+He2=PN(3);
+% if(Ex1==0 || Ex2==0 || En1==0||En2==0|| He1==0 || He2==0)
+%     MSPSCM=0;
+%     return
+% end
+    if(Ex1>Ex2)
+        Ex0=Ex1;
+        Ex1=Ex2;
+        Ex2=Ex0;
+        En0=En1;
+        En1=En2;
+        En2=En0;
+        He0=He1;
+        He1=He2;
+        He2=He0;
+    end
+
+  Sims=min((En1+3*He1)/En1,(En2+3*He2)/En2)/max((En1+3*He1)/En1,(En2+3*He2)/En2);
+  Simp=(min(Ex1+3*En1,Ex2+3*En2)-max(Ex1-3*En1,Ex2-3*En2))/(max(Ex1+3*En1,Ex2+3*En2)-min(Ex1-3*En1,Ex2-3*En2));
+  MSPSCM=sqrt(Sims*Simp);
+%   MSPSCM=vpa(MSPSCM,4);
+  MSPSCM=vpa(MSPSCM,2);
